@@ -1,11 +1,9 @@
-import java.util.ArrayList;
-
 public class Jogador {
 	private int id;
 	private String nome;
-	private ArrayList<Carta> cartasMao;
+	private Baralho cartas = new Baralho();
 	private boolean precisaSegurarCuringa;
-	private boolean bateu;
+	private boolean emJogo;
 	
 	public boolean isPrecisaSegurarCuringa() {
 		return precisaSegurarCuringa;
@@ -15,19 +13,13 @@ public class Jogador {
 	{
 		this.id = id;
 		this.nome = nome;
-		this.cartasMao = new ArrayList<Carta>();
 		this.precisaSegurarCuringa = false;
-		this.bateu = false;
+		this.emJogo = true;
 	}
 
 	public String getNome() {
 		return nome;
 	}
-
-	public ArrayList<Carta> getCartasMao() {
-		return cartasMao;
-	}
-	
 	
 	public void receberCarta(Carta carta)
 	{
@@ -36,34 +28,33 @@ public class Jogador {
 		else
 			this.precisaSegurarCuringa = false;
 		
-		this.cartasMao.add(carta);
+		this.cartas.adicionarCarta(carta);
 	}
 	
 	public Carta passarCarta(int indiceCarta)
 	{
-		return this.cartasMao.remove(indiceCarta-1);
+		return this.cartas.removerCarta(indiceCarta);
 	}
 
 	public String toString()
 	{
-		String s = this.getNome() + "(" + this.id + "): ";
-		
-		for(Carta c : this.cartasMao)
-		{
-			s += c.toString() + " ";
-		}
-		return s;
+		return this.getNome() + "(" + (this.getId()+1) + "): "+ this.cartas;
 	}
 	
-	public boolean podeBater()
+	public void bater()
+	{
+		this.emJogo = false;
+	}
+	
+	public boolean isVencedor()
 	{
 		int valorCarta;
 		
-		valorCarta = this.cartasMao.get(0).getValor();
+		valorCarta = this.cartas.getCarta(0).getValor();
 				
-		for (int i=1; i<cartasMao.size(); i++)
+		for (int i=1; i< this.cartas.size(); i++)
 		{
-			if(this.cartasMao.get(i).getValor() != valorCarta)
+			if(this.cartas.getCarta(i).getValor() != valorCarta)
 				return false;
 		}
 		
@@ -74,24 +65,18 @@ public class Jogador {
 		return this.id;
 	}
 	
-	public Naipe getNaipeCarta(int indiceCarta)
+	public void adicionarCarta(Carta carta)
 	{
-		return this.cartasMao.get(indiceCarta-1).getNaipe();
+		this.cartas.adicionarCarta(carta);
 	}
 	
-	public static Jogador getJogador(ArrayList<Jogador> jogadores, int id)
+	public Carta getCarta(int indiceCarta)
 	{
-		for (Jogador j : jogadores)
-		{
-			if (j.getId() == id)
-				return j;
-		}
-		
-		return null;
+		return this.cartas.getCarta(indiceCarta);
 	}
 	
-	public void bater()
+	public boolean isEmJogo()
 	{
-		this.bateu = true;
+		return this.emJogo;
 	}
 }

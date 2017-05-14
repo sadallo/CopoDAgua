@@ -2,23 +2,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Baralho {
-	private ArrayList<Carta> cartas;
+	private ArrayList<Carta> cartas = new ArrayList<Carta>();
 	
-	public Baralho (int tamanhoBaralho)
-	{
-		this.cartas = new ArrayList<Carta>();
+	public Baralho()
+	{		
 		
+	}
+	
+	public void construirBaralhoJogo(int valorInicial, int valorFinal)
+	{
 		for(Naipe naipe : Naipe.values())
 		{
 			if (naipe == Naipe.J)
 			{
-				cartas.add(new Carta(0, naipe));
+				this.adicionarCarta(new Carta(0, naipe));
 			}
 			else
 			{
-				for(int valor = 1; valor <= tamanhoBaralho; valor++)
+				for(int valor = valorInicial; valor <= valorFinal; valor++)
 				{
-					cartas.add(new Carta(valor, naipe));
+					this.adicionarCarta(new Carta(valor, naipe));
 				}
 			}
 		}
@@ -32,7 +35,7 @@ public class Baralho {
 	public Carta darCarta()
 	{
 		if(!this.isVazio())
-			return this.cartas.remove(0);
+			return this.removerCarta(0);
 		else
 			return null;
 	}
@@ -40,5 +43,36 @@ public class Baralho {
 	public void embaralhar()
 	{
 		Collections.shuffle(this.cartas);
+	}
+	
+	public void adicionarCarta(Carta carta)
+	{
+		this.cartas.add(carta);
+	}
+	
+	public Carta removerCarta(int indiceCarta)
+	{
+		return this.cartas.remove(indiceCarta);
+	}
+	
+	public Carta getCarta(int indiceCarta)
+	{
+		return this.cartas.get(indiceCarta);
+	}
+	
+	public String toString()
+	{
+		String s = "";
+		for(Carta c: this.cartas)
+		{
+			s += c + " ";
+		}
+		
+		return s;
+	}
+	
+	public int size()
+	{
+		return this.cartas.size();
 	}
 }
